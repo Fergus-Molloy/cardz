@@ -7,6 +7,8 @@ defmodule Cardz.Projects.Project do
     field :description, :string
     field :title, :string
 
+    has_many :columns, Cardz.Columns.Column
+
     timestamps(type: :utc_datetime)
   end
 
@@ -14,8 +16,9 @@ defmodule Cardz.Projects.Project do
   def changeset(project, attrs) do
     project
     |> cast(attrs, [:title, :description, :abbr])
-    |> validate_required([:title, :description, :abbr])
+    |> validate_required([:title, :abbr])
     |> unique_constraint(:abbr)
     |> unique_constraint(:title)
+    |> validate_length(:abbr, max: 5)
   end
 end
