@@ -8,15 +8,28 @@
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Title"><%= @project.title %></:item>
-  <:item title="Description"><%= @project.description %></:item>
-  <:item title="Abbr"><%= @project.abbr %></:item>
-</.list>
+<div class="flex flex-row gap-4">
+  <%= for col <- @project.columns do %>
+    <div class="flex flex-col gap-2 border-2 basis-60 rounded border-gray-500 p-2">
+      <%= col.title %>
+      <%= for card <- col.cards do %>
+        <div class="p-2 border-2 rounded border-gray-300">
+          <%= card.title %> <br />
+          <span class="text-sm text-gray-600">#<%= "#{@project.abbr}-#{card.id}" %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
 <.back navigate={~p"/projects"}>Back to projects</.back>
 
-<.modal :if={@live_action == :edit} id="project-modal" show on_cancel={JS.patch(~p"/projects/#{@project}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="project-modal"
+  show
+  on_cancel={JS.patch(~p"/projects/#{@project}")}
+>
   <.live_component
     module={CardzWeb.ProjectLive.FormComponent}
     id={@project.id}
