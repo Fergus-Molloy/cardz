@@ -25,6 +25,7 @@ defmodule CardzWeb.Router do
 
     live "/projects/:id", ProjectLive.Show, :show
     live "/projects/:id/show/edit", ProjectLive.Show, :edit
+    live "/projects/:id/columns/new", ProjectLive.Show, :new_column
   end
 
   # Other scopes may use custom stacks.

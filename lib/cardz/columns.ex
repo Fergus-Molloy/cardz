@@ -4,6 +4,7 @@ defmodule Cardz.Columns do
   """
 
   import Ecto.Query, warn: false
+  alias Cardz.Projects
   alias Cardz.Repo
 
   alias Cardz.Columns.Column
@@ -49,9 +50,12 @@ defmodule Cardz.Columns do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_column(attrs \\ %{}) do
+  def create_column(attrs \\ %{}, project_id) do
+    project = Projects.get_project!(project_id)
+
     %Column{}
     |> Column.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:project, project)
     |> Repo.insert()
   end
 
