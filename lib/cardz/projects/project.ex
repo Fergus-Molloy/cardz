@@ -6,6 +6,7 @@ defmodule Cardz.Projects.Project do
     field :abbr, :string
     field :description, :string
     field :title, :string
+    field :count, :integer
 
     has_many :columns, Cardz.Columns.Column
     has_many :cards, through: [:columns, :cards]

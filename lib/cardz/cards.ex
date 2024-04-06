@@ -7,6 +7,7 @@ defmodule Cardz.Cards do
   alias Cardz.Repo
 
   alias Cardz.Cards.Card
+  alias Cardz.Projects
 
   @doc """
   Returns the list of cards.
@@ -49,10 +50,23 @@ defmodule Cardz.Cards do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_card(attrs \\ %{}) do
-    %Card{}
-    |> Card.changeset(attrs)
-    |> Repo.insert()
+  def create_card(attrs \\ %{}, project_id) do
+    project = Projects.get_project!(project_id)
+
+    new_count = project.count + 1
+
+    card_changeset =
+      %Card{}
+      |> Card.changeset(Map.put(attrs, :number, new_count))
+
+    project_changeset =
+      project
+      |> Ecto.Changeset.change(%{count: new_count})
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:card, card_changeset)
+    |> Ecto.Multi.update(:project, project_changeset)
+    |> Repo.transaction()
   end
 
   @doc """

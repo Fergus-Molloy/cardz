@@ -5,6 +5,7 @@ defmodule Cardz.Cards.Card do
   schema "cards" do
     field :description, :string
     field :title, :string
+    field :number, :integer
 
     belongs_to :column, Cardz.Columns.Column
 
@@ -14,7 +15,8 @@ defmodule Cardz.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:title, :description])
-    |> validate_required([:title])
+    |> cast(attrs, [:title, :description, :number])
+    |> validate_required([:title, :number])
+    |> validate_number(:number, greater_than: 0)
   end
 end
