@@ -15,7 +15,7 @@
       <%= for card <- col.cards do %>
         <div class="p-2 border-2 rounded border-gray-300">
           <%= card.title %> <br />
-          <span class="text-sm text-gray-600">#<%= "#{@project.abbr}-#{card.id}" %></span>
+          <span class="text-sm text-gray-600">#<%= "#{@project.abbr}-#{card.number}" %></span>
         </div>
       <% end %>
     </div>
