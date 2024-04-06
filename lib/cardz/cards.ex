@@ -50,14 +50,16 @@ defmodule Cardz.Cards do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_card(attrs \\ %{}, project_id) do
+  def create_card(attrs \\ %{}, column_id, project_id) do
     project = Projects.get_project!(project_id)
+    column = Cardz.Columns.get_column!(column_id)
 
     new_count = project.count + 1
 
     card_changeset =
       %Card{}
-      |> Card.changeset(Map.put(attrs, :number, new_count))
+      |> Card.changeset(Map.put(attrs, "number", new_count))
+      |> Ecto.Changeset.put_assoc(:column, column)
 
     project_changeset =
       project

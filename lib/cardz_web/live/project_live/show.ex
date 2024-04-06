@@ -3,16 +3,12 @@ defmodule CardzWeb.ProjectLive.Show do
 
   alias Cardz.Projects
   alias Cardz.Columns
+  alias Cardz.Cards
 
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
-
-  # @impl true
-  # def handle_params(params, _url, socket) do
-  #   {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  # end
 
   @impl true
   def handle_params(params, _url, socket) do
@@ -25,6 +21,12 @@ defmodule CardzWeb.ProjectLive.Show do
     |> assign(:project, Projects.get_project!(id))
   end
 
+  defp apply_action(socket, :edit, %{"id" => id}) do
+    socket
+    |> assign(:page_title, page_title(socket.assigns.live_action))
+    |> assign(:project, Projects.get_project!(id))
+  end
+
   defp apply_action(socket, :new_column, %{"id" => project_id}) do
     socket
     |> assign(:page_title, "New Column")
@@ -32,9 +34,26 @@ defmodule CardzWeb.ProjectLive.Show do
     |> assign(:project, Projects.get_project!(project_id))
   end
 
+  defp apply_action(socket, :new_card, %{"id" => project_id, "column_id" => column_id}) do
+    socket
+    |> assign(:page_title, "New Card")
+    |> assign(:card, %Cards.Card{column_id: column_id})
+    |> assign(:project, Projects.get_project!(project_id))
+  end
+
   @impl true
-  def handle_info({CardzWeb.ProjectLive.ColumnFormComponent, {:saved_column, project}}, socket) do
-    {:noreply, stream_insert(socket, :project, project)}
+  def handle_info({CardzWeb.ProjectLive.FormComponent, {:saved, _}}, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({CardzWeb.ProjectLive.ColumnFormComponent, {:saved_column, _}}, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({CardzWeb.ProjectLive.CardFormComponent, {:saved_card, _}}, socket) do
+    {:noreply, socket}
   end
 
   defp page_title(:show), do: "Show Project"
