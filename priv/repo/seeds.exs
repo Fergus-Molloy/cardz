@@ -35,7 +35,7 @@
     project_id: project_id
   })
 
-Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Create a new card", column_id: todo_id})
-Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Create a new column", column_id: todo_id})
-Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Explore cardz app", column_id: in_progress_id})
 Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Setup cardz", column_id: done_id})
+Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Explore cardz app", column_id: in_progress_id})
+Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Create a new column", column_id: todo_id})
+Cardz.Repo.insert!(%Cardz.Cards.Card{title: "Create a new card", column_id: todo_id})
