@@ -11,7 +11,15 @@
 <div class="flex flex-row gap-4">
   <%= for col <- @project.columns do %>
     <div class="flex flex-col gap-2 border-2 basis-60 rounded border-gray-500 p-2">
-      <%= col.title %>
+      <div>
+        <%= col.title %>
+        <.link
+          patch={~p"/projects/#{@project}/columns/#{col.id}/edit"}
+          phx-click={JS.push_focus()}
+        >
+          <.button>Edit column</.button>
+        </.link>
+      </div>
       <.link
         patch={~p"/projects/#{@project}/columns/#{col}/cards/new"}
         phx-click={JS.push_focus()}
@@ -58,7 +66,7 @@
   />
 </.modal>
 <.modal
-  :if={@live_action == :new_column}
+  :if={@live_action == :new_column || @live_action == :edit_column}
   id="column-modal"
   show
   on_cancel={JS.patch(~p"/projects/#{@project}")}

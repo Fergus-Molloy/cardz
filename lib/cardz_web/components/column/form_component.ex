@@ -50,16 +50,13 @@ defmodule CardzWeb.Components.Column.FormComponent do
   end
 
   def handle_event("save", %{"column" => column_params}, socket) do
-    save_column(socket, socket.assigns.action, %{
-      column: column_params,
-      project_id: socket.assigns.id
-    })
+    save_column(socket, socket.assigns.action, column_params)
   end
 
-  defp save_column(socket, :edit, column_params) do
+  defp save_column(socket, :edit_column, column_params) do
     case Columns.update_column(socket.assigns.column, column_params) do
-      {:ok, column} ->
-        notify_parent({:saved_column, column})
+      {:ok, _} ->
+        notify_parent({:saved_column, Projects.get_project!(socket.assigns.id)})
 
         {:noreply,
          socket
@@ -71,16 +68,13 @@ defmodule CardzWeb.Components.Column.FormComponent do
     end
   end
 
-  defp save_column(socket, :new_column, %{
-         :project_id => project_id,
-         :column => column_params
-       }) do
-    project = Projects.get_project!(project_id)
+  defp save_column(socket, :new_column, column_params) do
+    project = Projects.get_project!(socket.assigns.id)
 
     column_params
-    |> Columns.create_column(project_id)
+    |> Columns.create_column(project.id)
     |> case do
-      {:ok, column} ->
+      {:ok, _} ->
         notify_parent({:saved_column, project})
 
         {:noreply,

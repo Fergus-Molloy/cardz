@@ -26,6 +26,7 @@ defmodule CardzWeb.Router do
     live "/projects/:id", ProjectLive.Show, :show
     live "/projects/:id/show/edit", ProjectLive.Show, :edit
     live "/projects/:id/columns/new", ProjectLive.Show, :new_column
+    live "/projects/:id/columns/:column_id/edit", ProjectLive.Show, :edit_column
     live "/projects/:id/columns/:column_id/cards/new", ProjectLive.Show, :new_card
     live "/projects/:id/columns/:column_id/cards/:card_id/edit", ProjectLive.Show, :edit_card
   end
