@@ -51,14 +51,10 @@ defmodule CardzWeb.Components.Card.FormComponent do
   end
 
   def handle_event("save", %{"card" => card_params}, socket) do
-    save_card(socket, socket.assigns.action, %{
-      card: card_params,
-      project_id: socket.assigns.id,
-      column_id: socket.assigns.card.column_id
-    })
+    save_card(socket, socket.assigns.action, card_params)
   end
 
-  defp save_card(socket, :edit, card_params) do
+  defp save_card(socket, :edit_card, card_params) do
     case Cards.update_card(socket.assigns.card, card_params) do
       {:ok, card} ->
         notify_parent({:saved_card, card})
@@ -73,15 +69,11 @@ defmodule CardzWeb.Components.Card.FormComponent do
     end
   end
 
-  defp save_card(socket, :new_card, %{
-         :project_id => project_id,
-         :column_id => column_id,
-         :card => card_params
-       }) do
-    project = Projects.get_project!(project_id)
+  defp save_card(socket, :new_card, card_params) do
+    project = Projects.get_project!(socket.assigns.id)
 
     card_params
-    |> Cards.create_card(column_id, project_id)
+    |> Cards.create_card(socket.assigns.column_id, project.id)
     |> case do
       {:ok, _card} ->
         notify_parent({:saved_card, project})

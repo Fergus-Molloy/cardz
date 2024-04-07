@@ -20,7 +20,16 @@
       </.link>
       <%= for card <- col.cards do %>
         <div class="p-2 border-2 rounded border-gray-300">
-          <%= card.title %> <br />
+          <div>
+            <%= card.title %>
+            <.link
+              patch={~p"/projects/#{@project}/columns/#{col.id}/cards/#{card.id}/edit"}
+              phx-click={JS.push_focus()}
+            >
+              <.button>Edit card</.button>
+            </.link>
+          </div>
+          <br />
           <span class="text-sm text-gray-600">#<%= "#{@project.abbr}-#{card.number}" %></span>
         </div>
       <% end %>
@@ -64,7 +73,7 @@
   />
 </.modal>
 <.modal
-  :if={@live_action == :new_card}
+  :if={@live_action == :new_card || @live_action == :edit_card}
   id="card-modal"
   show
   on_cancel={JS.patch(~p"/projects/#{@project}")}
@@ -76,5 +85,6 @@
     action={@live_action}
     card={@card}
     patch={~p"/projects/#{@project}"}
+    column_id={@column_id}
   />
 </.modal>

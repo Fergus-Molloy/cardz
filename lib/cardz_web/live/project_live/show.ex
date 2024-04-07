@@ -36,8 +36,16 @@ defmodule CardzWeb.ProjectLive.Show do
 
   defp apply_action(socket, :new_card, %{"id" => project_id, "column_id" => column_id}) do
     socket
+    |> assign(:column_id, column_id)
     |> assign(:page_title, "New Card")
-    |> assign(:card, %Cards.Card{column_id: column_id})
+    |> assign(:card, %Cards.Card{})
+    |> assign(:project, Projects.get_project!(project_id))
+  end
+
+  defp apply_action(socket, :edit_card, %{"id" => project_id, "card_id" => card_id}) do
+    socket
+    |> assign(:page_title, "Edit Card")
+    |> assign(:card, Cards.get_card!(card_id))
     |> assign(:project, Projects.get_project!(project_id))
   end
 
