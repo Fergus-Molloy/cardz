@@ -42,17 +42,17 @@ defmodule CardzWeb.ProjectLive.Show do
   end
 
   @impl true
-  def handle_info({CardzWeb.ProjectLive.FormComponent, {:saved, _}}, socket) do
+  def handle_info({CardzWeb.Components.Project.FormComponent, {:saved, _}}, socket) do
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info({CardzWeb.ProjectLive.ColumnFormComponent, {:saved_column, _}}, socket) do
+  def handle_info({CardzWeb.Components.Column.FormComponent, {:saved_column, _}}, socket) do
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info({CardzWeb.ProjectLive.CardFormComponent, {:saved_card, _}}, socket) do
+  def handle_info({CardzWeb.Components.Card.FormComponent, {:saved_card, _}}, socket) do
     {:noreply, socket}
   end
 

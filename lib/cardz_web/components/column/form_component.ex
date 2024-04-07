@@ -1,7 +1,8 @@
-defmodule CardzWeb.ProjectLive.FormComponent do
+defmodule CardzWeb.Components.Column.FormComponent do
+  alias Cardz.Projects
   use CardzWeb, :live_component
 
-  alias Cardz.Projects
+  alias Cardz.Columns
 
   @impl true
   def render(assigns) do
@@ -14,16 +15,14 @@ defmodule CardzWeb.ProjectLive.FormComponent do
 
       <.simple_form
         for={@form}
-        id="project-form"
+        id="column-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:description]} type="text" label="Description" />
-        <.input field={@form[:abbr]} type="text" label="Abbr" />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Project</.button>
+          <.button phx-disable-with="Saving...">Save Column</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -31,8 +30,8 @@ defmodule CardzWeb.ProjectLive.FormComponent do
   end
 
   @impl true
-  def update(%{project: project} = assigns, socket) do
-    changeset = Projects.change_project(project)
+  def update(%{column: column} = assigns, socket) do
+    changeset = Columns.change_column(column)
 
     {:ok,
      socket
@@ -41,27 +40,30 @@ defmodule CardzWeb.ProjectLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"project" => project_params}, socket) do
+  def handle_event("validate", %{"column" => column_params}, socket) do
     changeset =
-      socket.assigns.project
-      |> Projects.change_project(project_params)
+      socket.assigns.column
+      |> Columns.change_column(column_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"project" => project_params}, socket) do
-    save_project(socket, socket.assigns.action, project_params)
+  def handle_event("save", %{"column" => column_params}, socket) do
+    save_column(socket, socket.assigns.action, %{
+      column: column_params,
+      project_id: socket.assigns.id
+    })
   end
 
-  defp save_project(socket, :edit, project_params) do
-    case Projects.update_project(socket.assigns.project, project_params) do
-      {:ok, project} ->
-        notify_parent({:saved, project})
+  defp save_column(socket, :edit, column_params) do
+    case Columns.update_column(socket.assigns.column, column_params) do
+      {:ok, column} ->
+        notify_parent({:saved_column, column})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Project updated successfully")
+         |> put_flash(:info, "column updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -69,14 +71,21 @@ defmodule CardzWeb.ProjectLive.FormComponent do
     end
   end
 
-  defp save_project(socket, :new, project_params) do
-    case Projects.create_project(project_params) do
-      {:ok, project} ->
-        notify_parent({:saved, project})
+  defp save_column(socket, :new_column, %{
+         :project_id => project_id,
+         :column => column_params
+       }) do
+    project = Projects.get_project!(project_id)
+
+    column_params
+    |> Columns.create_column(project_id)
+    |> case do
+      {:ok, column} ->
+        notify_parent({:saved_column, project})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Project created successfully")
+         |> put_flash(:info, "column created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
