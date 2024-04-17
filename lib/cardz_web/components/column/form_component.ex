@@ -13,6 +13,17 @@ defmodule CardzWeb.Components.Column.FormComponent do
         <:subtitle>Use this form to manage project records in your database.</:subtitle>
       </.header>
 
+      <.simple_form for={@form} id="delete-column" phx-target={@myself} phx-submit="delete_column">
+        <div class="hidden">
+          <.input field={@form[:id]} type="number" value={@column.id} />
+        </div>
+        <:actions>
+          <.button value="test" data-confirm="Are you sure?" phx-disable-with="Deleting...">
+            Delete
+          </.button>
+        </:actions>
+      </.simple_form>
+
       <.simple_form
         for={@form}
         id="column-form"
@@ -47,6 +58,23 @@ defmodule CardzWeb.Components.Column.FormComponent do
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
+  end
+
+  @impl true
+  def handle_event("delete_column", %{"column" => column_params}, socket) do
+    %{"id" => id} = column_params
+    column = Columns.get_column!(id)
+
+    case Columns.delete_column(column) do
+      {:ok, _column} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "column deleted successfully")
+         |> push_patch(to: socket.assigns.patch)}
+
+      {:error, _} ->
+        {:noreply, socket |> put_flash(:error, "could not delete column")}
+    end
   end
 
   def handle_event("save", %{"column" => column_params}, socket) do
