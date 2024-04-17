@@ -36,7 +36,7 @@ defmodule Cardz.Columns do
       ** (Ecto.NoResultsError)
 
   """
-  def get_column!(id), do: Repo.get!(Column, id)
+  def get_column!(id), do: Repo.get!(Column, id) |> Repo.preload(:cards)
 
   @doc """
   Creates a column.

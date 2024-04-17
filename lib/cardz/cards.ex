@@ -4,6 +4,7 @@ defmodule Cardz.Cards do
   """
 
   import Ecto.Query, warn: false
+  alias Cardz.Columns
   alias Cardz.Repo
 
   alias Cardz.Cards.Card
@@ -54,16 +55,21 @@ defmodule Cardz.Cards do
     project = Projects.get_project!(project_id)
     column = Cardz.Columns.get_column!(column_id)
 
-    new_count = project.count + 1
+    card_position = Enum.count(column.cards) + 1
+    new_card_count = project.count + 1
 
     card_changeset =
       %Card{}
-      |> Card.changeset(Map.put(attrs, "number", new_count))
+      |> Card.changeset(
+        attrs
+        |> Map.put("number", new_card_count)
+        |> Map.put("position", card_position)
+      )
       |> Ecto.Changeset.put_assoc(:column, column)
 
     project_changeset =
       project
-      |> Ecto.Changeset.change(%{count: new_count})
+      |> Ecto.Changeset.change(%{count: new_card_count})
 
     Ecto.Multi.new()
     |> Ecto.Multi.insert(:card, card_changeset)
@@ -102,6 +108,13 @@ defmodule Cardz.Cards do
 
   """
   def delete_card(%Card{} = card) do
+    {_, [%Card{position: _}]} =
+      from(c in Card,
+        where: c.column_id == ^card.column_id and c.position > ^card.position,
+        select: [:position]
+      )
+      |> Repo.update_all(inc: [position: -1])
+
     Repo.delete(card)
   end
 

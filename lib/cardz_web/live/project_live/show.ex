@@ -67,7 +67,11 @@ defmodule CardzWeb.ProjectLive.Show do
     socket
     |> assign(:project, project)
     |> assign(:columns, project.columns)
-    |> assign(:cards, Enum.map(project.columns, fn col -> {col.id, col.cards} end))
+    |> assign(
+      :cards,
+      project.columns
+      |> Enum.map(fn col -> {col.id, Enum.sort_by(col.cards, fn card -> card.position end)} end)
+    )
   end
 
   @impl true
