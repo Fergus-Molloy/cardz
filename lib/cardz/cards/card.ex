@@ -5,7 +5,8 @@ defmodule Cardz.Cards.Card do
   schema "cards" do
     field :description, :string
     field :title, :string
-    field :status, :id
+
+    belongs_to :column, Cardz.Columns.Column
 
     timestamps(type: :utc_datetime)
   end
@@ -13,7 +14,7 @@ defmodule Cardz.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:title, :description])
-    |> validate_required([:title, :description])
+    |> cast(attrs, [:title, :description, :column_id])
+    |> validate_required([:title, :column_id])
   end
 end

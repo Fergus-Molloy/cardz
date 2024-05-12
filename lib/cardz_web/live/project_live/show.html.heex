@@ -16,6 +16,11 @@
       <li :for={col <- @project.columns}><%= col.title %></li>
     </ul>
   </:item>
+  <:item title="Cards">
+    <ul>
+      <li :for={card <- @project.cards}><%= card.title %></li>
+    </ul>
+  </:item>
 </.list>
 
 <.back navigate={~p"/projects"}>Back to projects</.back>

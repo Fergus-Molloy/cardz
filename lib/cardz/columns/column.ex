@@ -5,7 +5,9 @@ defmodule Cardz.Columns.Column do
   schema "columns" do
     field :description, :string
     field :title, :string
-    field :project_id, :id
+
+    belongs_to :project, Cardz.Projects.Project
+    has_many :cards, Cardz.Cards.Card
 
     timestamps(type: :utc_datetime)
   end

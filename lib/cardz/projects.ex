@@ -35,7 +35,7 @@ defmodule Cardz.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:columns)
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:cards, through: [:columns])
 
   @doc """
   Creates a project.

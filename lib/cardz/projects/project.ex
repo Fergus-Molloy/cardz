@@ -7,6 +7,7 @@ defmodule Cardz.Projects.Project do
     field :title, :string
 
     has_many :columns, Cardz.Columns.Column
+    has_many :cards, through: [:columns, :cards]
 
     timestamps(type: :utc_datetime)
   end
