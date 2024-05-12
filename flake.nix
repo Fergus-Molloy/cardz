@@ -38,23 +38,28 @@
               };
             };
 
-          devShells.default = pkgs.mkShell {
-            PGUSER = "fergus";
-            buildInputs = with pkgs; [
-              elixir
-              elixir-ls
+          devShells.default =
+            let
+              user = "fergus"; # change me to your user
+            in
+            pkgs.mkShell {
+              PGUSER = user;
+              buildInputs = with pkgs;
+                [
+                  elixir
+                  elixir-ls
 
-              nodejs_20
+                  nodejs_20
 
-              postgresql
+                  postgresql
 
-              nil
-              nixpkgs-fmt
-              (pkgs.writeShellScriptBin "pg-connect" ''
-                psql -h "${pg-host}" -d "${db-name}"
-              '')
-            ] ++ lib.optional stdenv.isLinux inotify-tools;
-          };
+                  nil
+                  nixpkgs-fmt
+                  (pkgs.writeShellScriptBin "pg-connect" ''
+                    psql -h "${pg-host}" -d "${db-name}"
+                  '')
+                ] ++ lib.optional stdenv.isLinux inotify-tools;
+            };
         };
     };
 }

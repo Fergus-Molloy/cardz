@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :cardz, Cardz.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: System.get_env("PGUSER", "postgres"),
+  password: System.get_env("PGPASSWORD", "postgres"),
   hostname: "localhost",
   database: "cardz_dev",
   stacktrace: true,
