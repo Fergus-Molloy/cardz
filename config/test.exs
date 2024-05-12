@@ -17,7 +17,7 @@ config :cardz, Cardz.Repo,
 # you can enable the server option below.
 config :cardz, CardzWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "gQ17T2HHEfm4rpRGIOGsAmxahv0OU+0QxrxsqZOrspcNg3Z2/2kzRNy0kbpspPQ9",
+  secret_key_base: "EXj2UsGLE2y0SuQrA0qneVE6OyPtsKV+3Az7lYzekXkkKYXcGyAmeBihcFOBlnIn",
   server: false
 
 # In test we don't send emails.
@@ -31,3 +31,7 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix_live_view,
+  # Enable helpful, but potentially expensive runtime checks
+  enable_expensive_runtime_checks: true

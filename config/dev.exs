@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :cardz, Cardz.Repo,
-  username: "#{System.get_env("PGUSER", "postgres")}",
+  username: "postgres",
   password: "postgres",
   hostname: "localhost",
   database: "cardz_dev",
@@ -23,7 +23,7 @@ config :cardz, CardzWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "ROtGdOcj03+WRy/+EwOS1Bl2XewKJow0WVwRxwiGP1arowHDnyxqD5cfyejZ5571",
+  secret_key_base: "8klOYq+HzeFEm7xj5oFxZwjCYHvUbLnqgyn/4jcJ0m5KGR49R0XYBLZRaW5JM7xx",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:cardz, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:cardz, ~w(--watch)]}
@@ -75,8 +75,11 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# Include HEEx debug annotations as HTML comments in rendered markup
-config :phoenix_live_view, :debug_heex_annotations, true
+config :phoenix_live_view,
+  # Include HEEx debug annotations as HTML comments in rendered markup
+  debug_heex_annotations: true,
+  # Enable helpful, but potentially expensive runtime checks
+  enable_expensive_runtime_checks: true
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false

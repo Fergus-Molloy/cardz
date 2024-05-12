@@ -7,7 +7,7 @@ defmodule CardzWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_cardz_key",
-    signing_salt: "tz7QLOjr",
+    signing_salt: "hkaOo6bA",
     same_site: "Lax"
   ]
 

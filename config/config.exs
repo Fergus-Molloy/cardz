@@ -20,7 +20,7 @@ config :cardz, CardzWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Cardz.PubSub,
-  live_view: [signing_salt: "rVqFoypk"]
+  live_view: [signing_salt: "o408nKBV"]
 
 # Configures the mailer
 #

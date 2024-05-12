@@ -18,17 +18,6 @@ defmodule CardzWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-
-    live "/projects", ProjectLive.Index, :index
-    live "/projects/new", ProjectLive.Index, :new
-    live "/projects/:id/edit", ProjectLive.Index, :edit
-
-    live "/projects/:id", ProjectLive.Show, :show
-    live "/projects/:id/show/edit", ProjectLive.Show, :edit
-    live "/projects/:id/columns/new", ProjectLive.Show, :new_column
-    live "/projects/:id/columns/:column_id/edit", ProjectLive.Show, :edit_column
-    live "/projects/:id/columns/:column_id/cards/new", ProjectLive.Show, :new_card
-    live "/projects/:id/columns/:column_id/cards/:card_id/edit", ProjectLive.Show, :edit_card
   end
 
   # Other scopes may use custom stacks.
