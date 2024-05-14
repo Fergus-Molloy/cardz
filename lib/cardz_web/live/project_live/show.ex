@@ -4,8 +4,8 @@ defmodule CardzWeb.ProjectLive.Show do
   alias Cardz.Projects
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(%{"id" => id}, _session, socket) do
+    {:ok, stream(socket, :cards, Cardz.Projects.get_cards(id) |> IO.inspect())}
   end
 
   @impl true

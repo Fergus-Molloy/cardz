@@ -18,7 +18,9 @@
   </:item>
   <:item title="Cards">
     <ul>
-      <li :for={card <- @project.cards}><%= card.title %></li>
+      <li :for={{_card_id, card} <- @streams.cards}>
+        <CardzWeb.Components.Cards.card_item card={card} />
+      </li>
     </ul>
   </:item>
 </.list>
