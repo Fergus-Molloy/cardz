@@ -37,6 +37,15 @@ defmodule Cardz.Columns do
   """
   def get_column!(id), do: Repo.get!(Column, id)
 
+  def get_cards(id),
+    do:
+      Repo.all(
+        from col in Column,
+          left_join: card in assoc(col, :cards),
+          where: col.id == ^id,
+          preload: [:cards]
+      )
+
   @doc """
   Creates a column.
 

@@ -4,6 +4,7 @@ defmodule Cardz.Projects do
   """
 
   import Ecto.Query, warn: false
+  alias Cardz.Columns
   alias Cardz.Repo
 
   alias Cardz.Projects.Project
@@ -35,7 +36,16 @@ defmodule Cardz.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:cards, through: [:columns])
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:columns)
+
+  def get_cards(id) do
+    query =
+      from card in Cardz.Cards.Card,
+        inner_join: col in assoc(card, :column),
+        where: col.project_id == ^id
+
+    Repo.all(query)
+  end
 
   @doc """
   Creates a project.
