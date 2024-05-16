@@ -17,11 +17,11 @@
     </ul>
   </:item>
   <:item title="Cards">
-    <ul>
-      <li :for={{_card_id, card} <- @streams.cards}>
-        <CardzWeb.Components.Cards.card_item card={card} />
-      </li>
-    </ul>
+    <.table id="cards" rows={@streams.cards}>
+      <:col :let={{_id, card}} label="Title"><%= card.title %></:col>
+      <:col :let={{_id, card}} label="Description"><%= card.description %></:col>
+      <:col :let={{_id, card}} label="Status"><%= card.column.title %></:col>
+    </.table>
   </:item>
 </.list>
 
