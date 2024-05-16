@@ -29,37 +29,40 @@
 
               services.postgres."pg" = {
                 enable = true;
-                listen_addresses = "127.0.0.1";
+                listen_addresses = pg-host;
                 initialDatabases = [
                   {
                     name = db-name;
                   }
                 ];
+                initialScript.after = ''
+                  CREATE USER postgres WITH PASSWORD 'postgres' SUPERUSER;
+                  GRANT ALL PRIVILEGES ON DATABASE ${db-name} TO postgres;
+                  GRANT ALL PRIVILEGES ON SCHEMA public TO postgres;
+                '';
               };
             };
 
-          devShells.default =
-            let
-              user = "fergus"; # change me to your user
-            in
-            pkgs.mkShell {
-              PGUSER = user;
-              buildInputs = with pkgs;
-                [
-                  elixir
-                  elixir-ls
+          devShells.default = pkgs.mkShell {
+            buildInputs = with pkgs;
+              [
+                elixir
+                elixir-ls
 
-                  nodejs_20
+                nodejs_20
 
-                  postgresql
+                postgresql
 
-                  nil
-                  nixpkgs-fmt
-                  (pkgs.writeShellScriptBin "pg-connect" ''
-                    psql -h "${pg-host}" -d "${db-name}"
-                  '')
-                ] ++ lib.optional stdenv.isLinux inotify-tools;
-            };
+                nil
+                nixpkgs-fmt
+                (pkgs.writeShellScriptBin "pg-connect" ''
+                  PGPASSWORD="postgres" psql -U postgres -h "${pg-host}" -d "${db-name}"
+                '')
+                (pkgs.writeShellScriptBin "pg-user-connect" ''
+                  psql -h "${pg-host}" -d "${db-name}"
+                '')
+              ] ++ lib.optional stdenv.isLinux inotify-tools;
+          };
         };
     };
 }
