@@ -1,4 +1,4 @@
-defmodule CardzWeb.ProjectLive.FormComponent do
+defmodule CardzWeb.Components.Projects.FormComponent do
   use CardzWeb, :live_component
 
   alias Cardz.Projects

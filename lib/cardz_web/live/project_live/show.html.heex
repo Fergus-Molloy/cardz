@@ -34,7 +34,7 @@
   on_cancel={JS.patch(~p"/projects/#{@project}")}
 >
   <.live_component
-    module={CardzWeb.ProjectLive.FormComponent}
+    module={CardzWeb.Components.Projects.FormComponent}
     id={@project.id}
     title={@page_title}
     action={@live_action}
