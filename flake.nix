@@ -48,6 +48,7 @@
               [
                 elixir
                 elixir-ls
+                mix2nix
 
                 nodejs_20
 
