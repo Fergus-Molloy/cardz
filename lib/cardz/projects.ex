@@ -38,13 +38,25 @@ defmodule Cardz.Projects do
   """
   def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:columns)
 
-  def get_cards(id) do
+  def get_cards_for_project(id) do
     query =
       from card in Cardz.Cards.Card,
-        inner_join: col in assoc(card, :column),
-        where: col.project_id == ^id
+        left_join: col in assoc(card, :column),
+        where: col.project_id == ^id,
+        preload: :column
 
-    Repo.all(query)
+    Repo.all(query) |> IO.inspect()
+  end
+
+  def get_cards_by_col(id) do
+    query =
+      from col in Cardz.Columns.Column,
+        inner_join: card in assoc(col, :cards),
+        where: col.project_id == ^id,
+        distinct: col.id,
+        preload: [:cards]
+
+    Repo.all(query) |> IO.inspect()
   end
 
   @doc """

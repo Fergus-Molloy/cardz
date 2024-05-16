@@ -101,4 +101,18 @@ defmodule Cardz.Cards do
   def change_card(%Card{} = card, attrs \\ %{}) do
     Card.changeset(card, attrs)
   end
+
+  def group_by_col(cards) do
+    cards
+    |> Enum.reduce(
+      %{},
+      fn card, acc ->
+        if Map.has_key?(acc, card.column_id) do
+          Map.put(acc, card.column_id, [card | acc.column_id])
+        else
+          Map.put(acc, card.column_id, [card])
+        end
+      end
+    )
+  end
 end
