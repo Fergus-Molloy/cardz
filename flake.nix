@@ -15,7 +15,6 @@
       ];
       perSystem = { self', pkgs, lib, ... }:
         let
-
           db-name = "cardz_dev";
           pg-host = "127.0.0.1";
         in
@@ -42,6 +41,31 @@
                 '';
               };
             };
+          # in theory this is how you package the app to be run using nix however it doesn't work
+          # due to mix trying to install tailwind itself when `mix assets.deploy` is run
+          # packages.cardz =
+          #   let
+          #     beamPackages = with pkgs; beam.packagesWith beam.interpreters.erlang;
+          #     pname = "cardz";
+          #     version = "0.1.0";
+          #     src = ./.;
+          #     mixFodDeps = beamPackages.fetchMixDeps {
+          #       pname = "mix-deps-${pname}";
+          #       inherit src version;
+          #       sha256 = "gmk8Gx2aSF6jzTv8bHI5Bhlf0xXUZWg6JvOtbrk+TDk=";
+          #     };
+          #   in
+          #   pkgs.mixRelease
+          #     {
+          #       inherit pname version src mixFodDeps;
+          #       buildInputs = with pkgs;[ nodePackages.tailwindcss ];
+          #       removeCookie = false; # makes output non-deterministic
+          #       mixNix = ./deps.nix;
+          #       releaseType = "escript";
+          #       postBuild = ''
+          #         mix assets.deploy
+          #       '';
+          #     };
 
           devShells.default = pkgs.mkShell {
             buildInputs = with pkgs;
