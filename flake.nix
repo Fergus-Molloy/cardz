@@ -17,6 +17,20 @@
         let
           db-name = "cardz_dev";
           pg-host = "127.0.0.1";
+          postgres = {
+            enable = true;
+            listen_addresses = pg-host;
+            initialDatabases = [
+              {
+                name = db-name;
+              }
+            ];
+            initialScript.after = ''
+              CREATE USER postgres WITH PASSWORD 'postgres' SUPERUSER;
+              GRANT ALL PRIVILEGES ON DATABASE ${db-name} TO postgres;
+              GRANT ALL PRIVILEGES ON SCHEMA public TO postgres;
+            '';
+          };
         in
         {
           # This adds a `self.packages.default`
@@ -25,22 +39,25 @@
               imports = [
                 inputs.services-flake.processComposeModules.default
               ];
-
-              services.postgres."pg" = {
-                enable = true;
-                listen_addresses = pg-host;
-                initialDatabases = [
-                  {
-                    name = db-name;
-                  }
-                ];
-                initialScript.after = ''
-                  CREATE USER postgres WITH PASSWORD 'postgres' SUPERUSER;
-                  GRANT ALL PRIVILEGES ON DATABASE ${db-name} TO postgres;
-                  GRANT ALL PRIVILEGES ON SCHEMA public TO postgres;
-                '';
+              settings = {
+                processes = {
+                  "phoenix" = {
+                    command = "mix phx.server";
+                    depends_on."pg".condition = "process_healthy";
+                  };
+                };
               };
+
+              services.postgres."pg" = postgres;
             };
+          process-compose."db" = { config, ... }:
+            {
+              imports = [
+                inputs.services-flake.processComposeModules.default
+              ];
+              services.postgres."pg" = postgres;
+            };
+
           # in theory this is how you package the app to be run using nix however it doesn't work
           # due to mix trying to install tailwind itself when `mix assets.deploy` is run
           # packages.cardz =
