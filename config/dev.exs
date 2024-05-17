@@ -23,7 +23,7 @@ config :cardz, CardzWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  server: true,
+  # server: true,
   secret_key_base: "8klOYq+HzeFEm7xj5oFxZwjCYHvUbLnqgyn/4jcJ0m5KGR49R0XYBLZRaW5JM7xx",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:cardz, ~w(--sourcemap=inline --watch)]},
