@@ -18,6 +18,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Source: https://github.com/phoenixframework/phoenix
 
 # Running with nix
+
 To start all required dependencies and the phoenix server use `nix run`. To run only the database use `nix run .#db`, this allows you
 to run the phoenix server seperately with either `mix phx.server` or `iex -S mix phx.server`.
 Once everything is running check you can access [`localhost:4000`](http://localhost:4000).
@@ -31,3 +32,7 @@ to run the project, including a helper script `pg-connect` which will connect yo
 Note that the postgres user does not have certain permissions like the ability to create new databases. This is because, by default
 the flake will create a user with the same username as the current user with full permissions. If you want to use this account to access
 the database you can use the `pg-user-connect` script instead.
+
+# Debugging
+
+Debugging is easily achieved using the repl `iex -S mix` will load the project into the repl.
