@@ -270,15 +270,15 @@ let
 
     phoenix_ecto = buildMix rec {
       name = "phoenix_ecto";
-      version = "4.5.1";
+      version = "4.6.1";
 
       src = fetchHex {
         pkg = "phoenix_ecto";
         version = "${version}";
-        sha256 = "ebe43aa580db129e54408e719fb9659b7f9e0d52b965c5be26cdca416ecead28";
+        sha256 = "0ae544ff99f3c482b0807c5cec2c8289e810ecacabc04959d82c3337f4703391";
       };
 
-      beamDeps = [ ecto phoenix_html plug ];
+      beamDeps = [ ecto phoenix_html plug postgrex ];
     };
 
     phoenix_html = buildMix rec {
@@ -400,12 +400,12 @@ let
 
     swoosh = buildMix rec {
       name = "swoosh";
-      version = "1.16.5";
+      version = "1.16.7";
 
       src = fetchHex {
         pkg = "swoosh";
         version = "${version}";
-        sha256 = "b2324cf696b09ee52e5e1049dcc77880a11fe618a381e2df1c5ca5d69c380eb0";
+        sha256 = "21073982816cff3410e90c0d80ebfd5a0bf4839c7b39db20bc69a6df123bbf35";
       };
 
       beamDeps = [ bandit finch jason mime plug telemetry ];
