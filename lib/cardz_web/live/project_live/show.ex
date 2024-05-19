@@ -30,6 +30,11 @@ defmodule CardzWeb.ProjectLive.Show do
   end
 
   @impl true
+  def handle_info({CardzWeb.Components.Projects.FormComponent, {:saved, project}}, socket) do
+    {:noreply, assign(socket, :project, project)}
+  end
+
+  @impl true
   def handle_info({CardzWeb.Components.Cards.FormComponent, {:saved_card, card}}, socket) do
     {:noreply, stream_insert(socket, :cards, card)}
   end
