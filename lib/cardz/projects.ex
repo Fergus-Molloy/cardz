@@ -37,16 +37,6 @@ defmodule Cardz.Projects do
   """
   def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload(:columns)
 
-  def get_cards_for_project(id) do
-    query =
-      from card in Cardz.Cards.Card,
-        left_join: col in assoc(card, :column),
-        where: col.project_id == ^id,
-        preload: :column
-
-    Repo.all(query)
-  end
-
   def get_cards_by_col(id) do
     query =
       from col in Cardz.Columns.Column,
