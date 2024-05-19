@@ -35,9 +35,13 @@
       </:col>
       <:action :let={{_id, card}}>
         <div class="sr-only">
-          <.link navigate={~p"/projects/#{@project}/cards/#{card}"}>Show</.link>
+          <.link patch={~p"/projects/#{@project}/cards/#{card}"} phx-click={JS.push_focus()}>
+            Show
+          </.link>
         </div>
-        <.link navigate={~p"/projects/#{@project}/cards/#{card}/edit"}>Edit</.link>
+        <.link patch={~p"/projects/#{@project}/cards/#{card}/edit"} phx-click={JS.push_focus()}>
+          Edit
+        </.link>
       </:action>
     </.table>
   </:item>
