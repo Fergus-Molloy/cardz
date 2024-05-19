@@ -23,12 +23,19 @@ defmodule CardzWeb.Components.Cards.FormComponent do
       >
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:description]} type="text" label="Description" />
+        <.input field={@form[:column_id]} type="select" label="Status" options={status_opts(@columns)}>
+        </.input>
         <:actions>
           <.button phx-disable-with="Saving...">Save Card</.button>
         </:actions>
       </.simple_form>
     </div>
     """
+  end
+
+  defp status_opts(columns) do
+    for status <- columns,
+        do: [key: status.title, value: status.id]
   end
 
   @impl true
