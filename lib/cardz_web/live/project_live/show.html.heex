@@ -16,11 +16,30 @@
     <%= @project.description %>
   </:item>
   <:item title="Columns">
-    <ul>
-      <li :for={col <- @project.columns}>
+    <.link patch={~p"/projects/#{@project}/columns/new"} phx-click={JS.push_focus()}>
+      <.button>Add Column</.button>
+    </.link>
+    <.table id="columns" rows={@streams.columns}>
+      <:col :let={{_id, col}} label="Title">
         <%= col.title %>
-      </li>
-    </ul>
+      </:col>
+      <:col :let={{_id, col}} label="Description">
+        <%= col.description %>
+      </:col>
+      <:col :let={{_id, col}} label="Card Count">
+        <%= Enum.count(col.cards) %>
+      </:col>
+      <:action :let={{_id, col}}>
+        <div class="sr-only">
+          <.link patch={~p"/projects/#{@project}/columns/#{col}"} phx-click={JS.push_focus()}>
+            Show
+          </.link>
+        </div>
+        <.link patch={~p"/projects/#{@project}/columns/#{col}/edit"} phx-click={JS.push_focus()}>
+          Edit
+        </.link>
+      </:action>
+    </.table>
   </:item>
   <:item title="Cards">
     <.link patch={~p"/projects/#{@project}/cards/new"} phx-click={JS.push_focus()}>

@@ -12,7 +12,8 @@ defmodule CardzWeb.ProjectLive.Show do
     {:ok,
      socket
      |> assign(:project, Projects.get_project!(id))
-     |> stream(:cards, Cardz.Projects.get_cards_for_project(id))}
+     |> stream(:columns, Cardz.Columns.list_columns_for_project(id, :preload))
+     |> stream(:cards, Cardz.Cards.list_cards_for_project(id))}
   end
 
   @impl true
@@ -42,8 +43,15 @@ defmodule CardzWeb.ProjectLive.Show do
     {:noreply, stream_insert(socket, :cards, card)}
   end
 
+  @impl true
+  def handle_info({CardzWeb.Components.Columns.FormComponent, {:saved_col, col}}, socket) do
+    {:noreply, stream_insert(socket, :columns, col)}
+  end
+
   defp page_title(:show), do: "Show Project"
   defp page_title(:edit), do: "Edit Project"
   defp page_title(:edit_card), do: "Edit Card"
   defp page_title(:new_card), do: "New Card"
+  defp page_title(:edit_col), do: "Edit Column"
+  defp page_title(:new_col), do: "New Column"
 end

@@ -21,6 +21,10 @@ defmodule Cardz.Columns do
     Repo.all(Column)
   end
 
+  def list_columns_for_project(id, :preload) do
+    Repo.all(from(col in Column, where: col.project_id == ^id, preload: :cards))
+  end
+
   def list_columns_for_project(id) do
     Repo.all(from(col in Column, where: col.project_id == ^id))
   end
