@@ -21,6 +21,10 @@ defmodule Cardz.Columns do
     Repo.all(Column)
   end
 
+  def list_columns_for_project(id) do
+    Repo.all(from(col in Column, where: col.project_id == ^id))
+  end
+
   @doc """
   Gets a single column.
 
@@ -59,8 +63,6 @@ defmodule Cardz.Columns do
 
   """
   def create_column(attrs \\ %{}) do
-    IO.inspect(attrs)
-
     %Column{}
     |> Column.changeset(attrs)
     |> Repo.insert()

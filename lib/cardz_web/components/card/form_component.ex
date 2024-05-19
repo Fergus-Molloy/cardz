@@ -5,8 +5,6 @@ defmodule CardzWeb.Components.Cards.FormComponent do
 
   @impl true
   def render(assigns) do
-    IO.inspect(assigns)
-
     ~H"""
     <div>
       <.header>
@@ -46,7 +44,7 @@ defmodule CardzWeb.Components.Cards.FormComponent do
      socket
      |> assign(assigns)
      |> assign_form(changeset)
-     |> assign(:columns, Cardz.Columns.list_columns())}
+     |> assign(:columns, Cardz.Columns.list_columns_for_project(assigns.id))}
   end
 
   @impl true
@@ -65,7 +63,6 @@ defmodule CardzWeb.Components.Cards.FormComponent do
 
   defp save_card(socket, :edit_card, card_params) do
     Cards.update_card(socket.assigns.card, card_params)
-    |> IO.inspect()
     |> case do
       {:ok, card} ->
         notify_parent({:saved_card, card})
