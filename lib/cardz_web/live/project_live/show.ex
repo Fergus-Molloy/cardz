@@ -16,14 +16,13 @@ defmodule CardzWeb.ProjectLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:project, Projects.get_project!(id))
      |> assign(
        :card,
-       # :card -> nil if no card_id is set, card_id will always be set when the modal is open
-       # see: router.ex ~p"/projects/:id/cards/:card_id/edit"
        assigns["card_id"]
        |> case do
-         nil -> nil
+         # new card
+         nil -> %Cardz.Cards.Card{}
+         # edit card
          card_id -> Cardz.Cards.get_card!(card_id)
        end
      )}
