@@ -35,7 +35,7 @@ defmodule Cardz.Cards do
       ** (Ecto.NoResultsError)
 
   """
-  def get_card!(id), do: Repo.get!(Card, id)
+  def get_card!(id), do: Repo.get!(Card, id) |> Repo.preload(:column)
 
   @doc """
   Creates a card.
@@ -71,6 +71,11 @@ defmodule Cardz.Cards do
     card
     |> Card.changeset(attrs)
     |> Repo.update()
+    |> case do
+      # get card will load normal preloads
+      {:ok, card} -> {:ok, get_card!(card.id)}
+      {:eror, changeset} -> {:error, changeset}
+    end
   end
 
   @doc """

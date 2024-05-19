@@ -9,18 +9,36 @@
 </.header>
 
 <.list>
-  <:item title="Title"><%= @project.title %></:item>
-  <:item title="Description"><%= @project.description %></:item>
+  <:item title="Title">
+    <%= @project.title %>
+  </:item>
+  <:item title="Description">
+    <%= @project.description %>
+  </:item>
   <:item title="Columns">
     <ul>
-      <li :for={col <- @project.columns}><%= col.title %></li>
+      <li :for={col <- @project.columns}>
+        <%= col.title %>
+      </li>
     </ul>
   </:item>
   <:item title="Cards">
     <.table id="cards" rows={@streams.cards}>
-      <:col :let={{_id, card}} label="Title"><%= card.title %></:col>
-      <:col :let={{_id, card}} label="Description"><%= card.description %></:col>
-      <:col :let={{_id, card}} label="Status"><%= card.column.title %></:col>
+      <:col :let={{_id, card}} label="Title">
+        <%= card.title %>
+      </:col>
+      <:col :let={{_id, card}} label="Description">
+        <%= card.description %>
+      </:col>
+      <:col :let={{_id, card}} label="Status">
+        <%= card.column.title %>
+      </:col>
+      <:action :let={{_id, card}}>
+        <div class="sr-only">
+          <.link navigate={~p"/projects/#{@project}/cards/#{card}"}>Show</.link>
+        </div>
+        <.link navigate={~p"/projects/#{@project}/cards/#{card}/edit"}>Edit</.link>
+      </:action>
     </.table>
   </:item>
 </.list>
@@ -39,6 +57,22 @@
     title={@page_title}
     action={@live_action}
     project={@project}
+    patch={~p"/projects/#{@project}"}
+  />
+</.modal>
+
+<.modal
+  :if={@live_action == :edit_card}
+  id="card-modal"
+  show
+  on_cancel={JS.patch(~p"/projects/#{@project}")}
+>
+  <.live_component
+    module={CardzWeb.Components.Cards.FormComponent}
+    id={@project.id}
+    title={@page_title}
+    action={@live_action}
+    card={@card}
     patch={~p"/projects/#{@project}"}
   />
 </.modal>

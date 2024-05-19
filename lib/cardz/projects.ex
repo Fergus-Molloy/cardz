@@ -45,7 +45,7 @@ defmodule Cardz.Projects do
         where: col.project_id == ^id,
         preload: :column
 
-    Repo.all(query) |> IO.inspect()
+    Repo.all(query)
   end
 
   def get_cards_by_col(id) do
@@ -56,7 +56,7 @@ defmodule Cardz.Projects do
         distinct: col.id,
         preload: [:cards]
 
-    Repo.all(query) |> IO.inspect()
+    Repo.all(query)
   end
 
   @doc """
