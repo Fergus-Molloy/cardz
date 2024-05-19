@@ -53,6 +53,10 @@ defmodule Cardz.Cards do
     %Card{}
     |> Card.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, card} -> {:ok, get_card!(card.id)}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 
   @doc """

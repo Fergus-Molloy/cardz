@@ -23,6 +23,9 @@
     </ul>
   </:item>
   <:item title="Cards">
+    <.link patch={~p"/projects/#{@project}/cards/new"} phx-click={JS.push_focus()}>
+      <.button>Add Card</.button>
+    </.link>
     <.table id="cards" rows={@streams.cards}>
       <:col :let={{_id, card}} label="Title">
         <%= card.title %>
@@ -66,7 +69,7 @@
 </.modal>
 
 <.modal
-  :if={@live_action == :edit_card}
+  :if={show_card_modal(@live_action)}
   id="card-modal"
   show
   on_cancel={JS.patch(~p"/projects/#{@project}")}

@@ -3,6 +3,10 @@ defmodule CardzWeb.ProjectLive.Show do
 
   alias Cardz.Projects
 
+  def show_card_modal(:edit_card), do: true
+  def show_card_modal(:new_card), do: true
+  def show_card_modal(_), do: false
+
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     {:ok,
@@ -12,7 +16,7 @@ defmodule CardzWeb.ProjectLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id} = assigns, _, socket) do
+  def handle_params(assigns, _, socket) do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
@@ -41,4 +45,5 @@ defmodule CardzWeb.ProjectLive.Show do
   defp page_title(:show), do: "Show Project"
   defp page_title(:edit), do: "Edit Project"
   defp page_title(:edit_card), do: "Edit Card"
+  defp page_title(:new_card), do: "New Card"
 end

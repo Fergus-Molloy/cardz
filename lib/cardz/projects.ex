@@ -4,7 +4,6 @@ defmodule Cardz.Projects do
   """
 
   import Ecto.Query, warn: false
-  alias Cardz.Columns
   alias Cardz.Repo
 
   alias Cardz.Projects.Project
