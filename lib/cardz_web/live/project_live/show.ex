@@ -7,6 +7,10 @@ defmodule CardzWeb.ProjectLive.Show do
   def show_card_modal(:new_card), do: true
   def show_card_modal(_), do: false
 
+  def show_column_modal(:edit_column), do: true
+  def show_column_modal(:new_column), do: true
+  def show_column_modal(_), do: false
+
   @impl true
   def mount(%{"id" => id}, _session, socket) do
     {:ok,
@@ -21,6 +25,16 @@ defmodule CardzWeb.ProjectLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(
+       :column,
+       assigns["column_id"]
+       |> case do
+         # new col
+         nil -> %Cardz.Columns.Column{}
+         # edit col
+         col_id -> Cardz.Columns.get_column!(col_id)
+       end
+     )
      |> assign(
        :card,
        assigns["card_id"]
@@ -52,6 +66,6 @@ defmodule CardzWeb.ProjectLive.Show do
   defp page_title(:edit), do: "Edit Project"
   defp page_title(:edit_card), do: "Edit Card"
   defp page_title(:new_card), do: "New Card"
-  defp page_title(:edit_col), do: "Edit Column"
-  defp page_title(:new_col), do: "New Column"
+  defp page_title(:edit_column), do: "Edit Column"
+  defp page_title(:new_column), do: "New Column"
 end

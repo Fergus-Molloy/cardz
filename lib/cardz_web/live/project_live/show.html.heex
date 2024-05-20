@@ -102,3 +102,19 @@
     patch={~p"/projects/#{@project}"}
   />
 </.modal>
+
+<.modal
+  :if={show_column_modal(@live_action)}
+  id="column-modal"
+  show
+  on_cancel={JS.patch(~p"/projects/#{@project}")}
+>
+  <.live_component
+    module={CardzWeb.Components.Columns.FormComponent}
+    id={@project.id}
+    title={@page_title}
+    action={@live_action}
+    column={@column}
+    patch={~p"/projects/#{@project}"}
+  />
+</.modal>
