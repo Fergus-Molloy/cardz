@@ -26,6 +26,7 @@ defmodule Cardz.Cards do
       from card in Cardz.Cards.Card,
         left_join: col in assoc(card, :column),
         where: col.project_id == ^id,
+        order_by: [card.column_id, card.priority],
         preload: :column
 
     Repo.all(query)
