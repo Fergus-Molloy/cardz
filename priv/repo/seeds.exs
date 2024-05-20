@@ -40,23 +40,27 @@ col_done =
 Cardz.Repo.insert!(%Cardz.Cards.Card{
   title: "Add new card",
   description: "add a new card to a column",
-  column_id: col_todo.id
+  column_id: col_todo.id,
+  priority: 1
 })
 
 Cardz.Repo.insert!(%Cardz.Cards.Card{
   title: "Add new column",
   description: "add a new column to a project",
-  column_id: col_todo.id
+  column_id: col_todo.id,
+  priority: 2
 })
 
 Cardz.Repo.insert!(%Cardz.Cards.Card{
   title: "Explore the cardz app",
   description: "take a look at the feature available",
-  column_id: col_in_progress.id
+  column_id: col_in_progress.id,
+  priority: 1
 })
 
 Cardz.Repo.insert!(%Cardz.Cards.Card{
   title: "Successfully run the cardz app",
   description: "get the app up and running and seed it with example data",
-  column_id: col_done.id
+  column_id: col_done.id,
+  priority: 1
 })
