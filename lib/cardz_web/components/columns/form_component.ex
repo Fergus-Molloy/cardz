@@ -30,8 +30,8 @@ defmodule CardzWeb.Components.Columns.FormComponent do
   end
 
   @impl true
-  def update(%{col: col} = assigns, socket) do
-    changeset = Columns.change_column(col)
+  def update(%{column: column} = assigns, socket) do
+    changeset = Columns.change_column(column)
 
     {:ok,
      socket
@@ -40,24 +40,24 @@ defmodule CardzWeb.Components.Columns.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"col" => col_params}, socket) do
+  def handle_event("validate", %{"column" => column_params}, socket) do
     changeset =
-      socket.assigns.col
-      |> Columns.change_column(col_params)
+      socket.assigns.column
+      |> Columns.change_column(column_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"col" => col_params}, socket) do
-    save_col(socket, socket.assigns.action, col_params)
+  def handle_event("save", %{"column" => column_params}, socket) do
+    save_col(socket, socket.assigns.action, column_params)
   end
 
-  defp save_col(socket, :edit_col, col_params) do
-    Columns.update_column(socket.assigns.col, col_params)
+  defp save_col(socket, :edit_column, column_params) do
+    Columns.update_column(socket.assigns.column, column_params)
     |> case do
-      {:ok, col} ->
-        notify_parent({:saved_col, col})
+      {:ok, column} ->
+        notify_parent({:saved_column, column})
 
         {:noreply,
          socket
@@ -69,10 +69,10 @@ defmodule CardzWeb.Components.Columns.FormComponent do
     end
   end
 
-  defp save_col(socket, :new_col, col_params) do
-    case Columns.create_column(col_params) do
-      {:ok, col} ->
-        notify_parent({:saved_col, col})
+  defp save_col(socket, :new_column, column_params) do
+    case Columns.create_column(column_params) do
+      {:ok, column} ->
+        notify_parent({:saved_column, column})
 
         {:noreply,
          socket
