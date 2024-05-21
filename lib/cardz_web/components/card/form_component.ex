@@ -4,7 +4,9 @@ defmodule CardzWeb.Components.Cards.FormComponent do
   alias Cardz.Cards
 
   @impl true
-  def render(assigns) do
+  def render(%{card: card} = assigns) do
+    assigns = assign(assigns, :columns, Cardz.Columns.list_columns_for_project(assigns.id))
+
     ~H"""
     <div>
       <.header>
@@ -21,8 +23,13 @@ defmodule CardzWeb.Components.Cards.FormComponent do
       >
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:description]} type="text" label="Description" />
-        <.input field={@form[:column_id]} type="select" label="Status" options={status_opts(@columns)}>
-        </.input>
+        <.input
+          field={@form[:column_id]}
+          type="select"
+          label="Status"
+          options={status_opts(@columns)}
+        />
+        <.input field={@form[:priority]} type="number" label="Priority" min="0" max={@max_priority} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Card</.button>
         </:actions>
@@ -37,14 +44,30 @@ defmodule CardzWeb.Components.Cards.FormComponent do
   end
 
   @impl true
-  def update(%{card: card} = assigns, socket) do
+  def update(%{card: card, id: project_id} = assigns, socket) do
     changeset = Cards.change_card(card)
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_form(changeset)
-     |> assign(:columns, Cardz.Columns.list_columns_for_project(assigns.id))}
+    get_card_count =
+      fn %{id: id} -> Cardz.Columns.count_cards(id) end
+
+    s =
+      if card != nil && card.column_id != nil do
+        socket
+        |> assign(assigns)
+        |> assign_form(changeset)
+        |> assign(:max_priority, Cardz.Columns.count_cards(card.column_id) + 1)
+      else
+        socket
+        |> assign(assigns)
+        |> assign_form(changeset)
+        |> assign(
+          :max_priority,
+          Cardz.Columns.get_first_column(project_id)
+          |> get_card_count.()
+        )
+      end
+
+    {:ok, s}
   end
 
   @impl true
@@ -54,7 +77,7 @@ defmodule CardzWeb.Components.Cards.FormComponent do
       |> Cards.change_card(card_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign_form(socket, changeset)}
+    {:noreply, socket |> assign_form(changeset)}
   end
 
   def handle_event("save", %{"card" => card_params}, socket) do

@@ -29,6 +29,16 @@ defmodule Cardz.Columns do
     Repo.all(from(col in Column, where: col.project_id == ^id))
   end
 
+  def count_cards(id) do
+    query =
+      from(card in Cardz.Cards.Card,
+        where: card.column_id == ^id,
+        select: count(card.id)
+      )
+
+    Repo.one(query)
+  end
+
   @doc """
   Gets a single column.
 
@@ -44,6 +54,9 @@ defmodule Cardz.Columns do
 
   """
   def get_column!(id), do: Repo.get!(Column, id)
+
+  def get_first_column(project_id),
+    do: Repo.one(from(col in Column, where: col.project_id == ^project_id, limit: 1))
 
   def get_cards(id),
     do:
