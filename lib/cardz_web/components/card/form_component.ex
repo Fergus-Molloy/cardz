@@ -4,7 +4,7 @@ defmodule CardzWeb.Components.Cards.FormComponent do
   alias Cardz.Cards
 
   @impl true
-  def render(%{card: card} = assigns) do
+  def render(assigns) do
     assigns = assign(assigns, :columns, Cardz.Columns.list_columns_for_project(assigns.id))
 
     ~H"""
