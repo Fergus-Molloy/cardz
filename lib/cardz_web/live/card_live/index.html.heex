@@ -12,17 +12,17 @@
   rows={@streams.cards}
   row_click={fn {_id, card} -> JS.navigate(~p"/projects/#{@project_id}/cards/#{card}") end}
 >
-  <:col :let={{_id, project}} label="Title"><%= project.title %></:col>
-  <:col :let={{_id, project}} label="Description"><%= project.description %></:col>
-  <:action :let={{_id, project}}>
+  <:col :let={{_id, card}} label="Title"><%= card.title %></:col>
+  <:col :let={{_id, card}} label="Description"><%= card.description %></:col>
+  <:action :let={{_id, card}}>
     <div class="sr-only">
-      <.link navigate={~p"/projects/#{project}"}>Show</.link>
+      <.link navigate={~p"/projects/#{@project_id}/cards/#{card}"}>Show</.link>
     </div>
-    <.link patch={~p"/projects/#{project}/edit"}>Edit</.link>
+    <.link patch={~p"/projects/#{@project_id}/cards/#{card}/edit"}>Edit</.link>
   </:action>
-  <:action :let={{id, project}}>
+  <:action :let={{id, card}}>
     <.link
-      phx-click={JS.push("delete", value: %{id: project.id}) |> hide("##{id}")}
+      phx-click={JS.push("delete", value: %{id: card.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
       Delete
@@ -32,16 +32,16 @@
 
 <.modal
   :if={@live_action in [:new, :edit]}
-  id="project-modal"
+  id="card-modal"
   show
-  on_cancel={JS.patch(~p"/projects")}
+  on_cancel={JS.patch(~p"/projects/#{@project_id}/cards")}
 >
   <.live_component
-    module={CardzWeb.Components.Projects.FormComponent}
-    id={@project.id || :new}
+    module={CardzWeb.Components.Cards.FormComponent}
+    id={@project_id}
     title={@page_title}
     action={@live_action}
-    project={@project}
-    patch={~p"/projects"}
+    card={@card}
+    patch={~p"/projects/#{@project_id}/cards"}
   />
 </.modal>

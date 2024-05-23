@@ -42,9 +42,9 @@ defmodule CardzWeb.CardLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    project = Projects.get_project!(id)
-    {:ok, _} = Projects.delete_project(project)
+    card = Cards.get_card!(id)
+    {:ok, _} = Cards.delete_card(card)
 
-    {:noreply, stream_delete(socket, :projects, project)}
+    {:noreply, stream_delete(socket, :cards, card)}
   end
 end

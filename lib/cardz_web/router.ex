@@ -18,25 +18,29 @@ defmodule CardzWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
 
-    live "/projects", ProjectLive.Index, :index
-    live "/projects/new", ProjectLive.Index, :new
-    live "/projects/:id/edit", ProjectLive.Index, :edit
+  scope "/projects", CardzWeb do
+    pipe_through :browser
 
-    live "/projects/:id", ProjectLive.Show, :show
-    live "/projects/:id/show/edit", ProjectLive.Show, :edit
+    live "/", ProjectLive.Index, :index
+    live "/new", ProjectLive.Index, :new
+    live "/:id/edit", ProjectLive.Index, :edit
 
-    live "/projects/:id/edit/cards/new", ProjectLive.Show, :new_card
-    live "/projects/:id/edit/cards/:card_id", ProjectLive.Show, :show_card
-    live "/projects/:id/edit/cards/:card_id/edit", ProjectLive.Show, :edit_card
+    live "/:id", ProjectLive.Show, :show
+    live "/:id/show/edit", ProjectLive.Show, :edit
 
-    live "/projects/:id/columns/new", ProjectLive.Show, :new_column
-    live "/projects/:id/columns/:column_id", ProjectLive.Show, :show_column
-    live "/projects/:id/columns/:column_id/edit", ProjectLive.Show, :edit_column
+    live "/:id/edit/cards/new", ProjectLive.Show, :new_card
+    live "/:id/edit/cards/:card_id/edit", ProjectLive.Show, :edit_card
 
-    live "/projects/:project_id/cards", CardLive.Index, :index
-    live "/projects/:project_id/cards/new", CardLive.Index, :index
-    live "/projects/:project_id/cards/:id/edit", CardLive.Index, :edit
+    live "/:id/columns/new", ProjectLive.Show, :new_column
+    live "/:id/columns/:column_id", ProjectLive.Show, :show_column
+    live "/:id/columns/:column_id/edit", ProjectLive.Show, :edit_column
+
+    live "/:project_id/cards", CardLive.Index, :index
+    live "/:project_id/cards/new", CardLive.Index, :new
+    live "/:project_id/cards/:id/edit", CardLive.Index, :edit
+    live "/:project_id/cards/:card_id", CardLive.Show, :show
   end
 
   # Other scopes may use custom stacks.

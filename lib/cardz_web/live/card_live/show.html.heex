@@ -1,123 +1,42 @@
 <.header>
-  Project <%= @project.id %>
-  <:subtitle>This is a project record from your database.</:subtitle>
+  Card <%= @card.id %>
+  <:subtitle>This is a card record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/projects/#{@project}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit project</.button>
+    <.link patch={~p"/projects/#{@project_id}/cards/#{@card}/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit card</.button>
     </.link>
   </:actions>
 </.header>
 
 <.list>
   <:item title="Title">
-    <%= @project.title %>
+    <%= @card.title %>
   </:item>
   <:item title="Description">
-    <%= @project.description %>
+    <%= @card.description %>
   </:item>
-  <:item title="Columns">
-    <.link patch={~p"/projects/#{@project}/columns/new"} phx-click={JS.push_focus()}>
-      <.button>Add Column</.button>
-    </.link>
-    <.table id="columns" rows={@streams.columns}>
-      <:col :let={{_id, col}} label="Title">
-        <%= col.title %>
-      </:col>
-      <:col :let={{_id, col}} label="Description">
-        <%= col.description %>
-      </:col>
-      <:col :let={{_id, col}} label="Card Count">
-        <%= Enum.count(col.cards) %>
-      </:col>
-      <:action :let={{_id, col}}>
-        <div class="sr-only">
-          <.link patch={~p"/projects/#{@project}/columns/#{col}"} phx-click={JS.push_focus()}>
-            Show
-          </.link>
-        </div>
-        <.link patch={~p"/projects/#{@project}/columns/#{col}/edit"} phx-click={JS.push_focus()}>
-          Edit
-        </.link>
-      </:action>
-    </.table>
+  <:item title="Column">
+    <%= @card.column.title %>
   </:item>
-  <:item title="Cards">
-    <.link patch={~p"/projects/#{@project}/edit/cards/new"} phx-click={JS.push_focus()}>
-      <.button>Add Card</.button>
-    </.link>
-    <.table id="cards" rows={@streams.cards}>
-      <:col :let={{_id, card}} label="Title">
-        <%= card.title %>
-      </:col>
-      <:col :let={{_id, card}} label="Description">
-        <%= card.description %>
-      </:col>
-      <:col :let={{_id, card}} label="Status">
-        <%= card.column.title %>
-      </:col>
-      <:action :let={{_id, card}}>
-        <div class="sr-only">
-          <.link patch={~p"/projects/#{@project}/edit/cards/#{card}"} phx-click={JS.push_focus()}>
-            Show
-          </.link>
-        </div>
-        <.link
-          patch={~p"/projects/#{@project}/edit/cards/#{card}/edit"}
-          phx-click={JS.push_focus()}
-        >
-          Edit
-        </.link>
-      </:action>
-    </.table>
+  <:item title="Priority">
+    <%= @card.priority %>
   </:item>
 </.list>
 
-<.back navigate={~p"/projects"}>Back to projects</.back>
+<.back navigate={~p"/projects/#{@project_id}/cards"}>Back to cards</.back>
 
 <.modal
   :if={@live_action == :edit}
-  id="project-modal"
-  show
-  on_cancel={JS.patch(~p"/projects/#{@project}")}
->
-  <.live_component
-    module={CardzWeb.Components.Projects.FormComponent}
-    id={@project.id}
-    title={@page_title}
-    action={@live_action}
-    project={@project}
-    patch={~p"/projects/#{@project}"}
-  />
-</.modal>
-
-<.modal
-  :if={show_card_modal(@live_action)}
   id="card-modal"
   show
   on_cancel={JS.patch(~p"/projects/#{@project}")}
 >
   <.live_component
     module={CardzWeb.Components.Cards.FormComponent}
-    id={@project.id}
+    id={@project_id}
     title={@page_title}
     action={@live_action}
     card={@card}
-    patch={~p"/projects/#{@project}"}
-  />
-</.modal>
-
-<.modal
-  :if={show_column_modal(@live_action)}
-  id="column-modal"
-  show
-  on_cancel={JS.patch(~p"/projects/#{@project}")}
->
-  <.live_component
-    module={CardzWeb.Components.Columns.FormComponent}
-    id={@project.id}
-    title={@page_title}
-    action={@live_action}
-    column={@column}
-    patch={~p"/projects/#{@project}"}
+    patch={~p"/projects/#{@project_id}/cards/#{@card}"}
   />
 </.modal>
